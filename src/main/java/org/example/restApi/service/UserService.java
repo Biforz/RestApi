@@ -2,7 +2,7 @@ package org.example.restApi.service;
 
 import org.example.restApi.model.User;
 import org.example.restApi.repository.UserRepository;
-import org.example.restApi.repository.hibernate.HibernateUserRepositoryImpl;
+import org.example.restApi.repository.impl.HibernateUserRepositoryImpl;
 
 import java.util.List;
 

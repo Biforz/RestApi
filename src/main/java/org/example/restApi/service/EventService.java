@@ -2,7 +2,7 @@ package org.example.restApi.service;
 
 import org.example.restApi.model.Event;
 import org.example.restApi.repository.EventRepository;
-import org.example.restApi.repository.hibernate.HibernateEventRepositoryImpl;
+import org.example.restApi.repository.impl.HibernateEventRepositoryImpl;
 
 import java.util.List;
 

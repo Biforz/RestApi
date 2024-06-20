@@ -1,4 +1,4 @@
-package org.example.restApi.servlet;
+package org.example.restApi.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.restApi.model.User;
@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.util.List;
 
 @WebServlet("/users")
-public class UserServlet extends HttpServlet {
+public class UserRestControllerV1 extends HttpServlet {
     private UserService userService;
 
     @Override

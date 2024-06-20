@@ -1,4 +1,4 @@
-package org.example.restApi.servlet;
+package org.example.restApi.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.restApi.model.Event;
@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.util.List;
 
 @WebServlet("/events")
-public class EventServlet extends HttpServlet {
+public class EventRestControllerV1 extends HttpServlet {
     private EventService eventService;
 
     @Override

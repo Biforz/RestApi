@@ -1,44 +1,44 @@
-package org.example.restApi.repository.hibernate;
+package org.example.restApi.repository.impl;
 
 import org.example.restApi.config.HibernateSessionFactory;
-import org.example.restApi.model.Event;
-import org.example.restApi.repository.EventRepository;
+import org.example.restApi.model.User;
+import org.example.restApi.repository.UserRepository;
 import org.hibernate.Session;
 
 import java.util.List;
 
-public class HibernateEventRepositoryImpl implements EventRepository {
+public class HibernateUserRepositoryImpl implements UserRepository {
     @Override
-    public List<Event> findAll() {
+    public List<User> findAll() {
         try (Session session = HibernateSessionFactory.session()) {
-            return session.createQuery("FROM Event", Event.class).list();
+            return session.createQuery("FROM User").list();
         }
     }
 
     @Override
-    public Event findById(Long id) {
+    public User findById(Long id) {
         try (Session session = HibernateSessionFactory.session()) {
-            return session.get(Event.class, id);
+            return session.get(User.class, id);
         }
     }
 
     @Override
-    public Event save(Event event) {
+    public User save(User user) {
         try (Session session = HibernateSessionFactory.session()) {
             session.beginTransaction();
-            session.save(event);
+            session.save(user);
             session.getTransaction().commit();
-            return event;
+            return user;
         }
     }
 
     @Override
-    public Event update(Long id, Event event) {
+    public User update(Long id, User user) {
         try (Session session = HibernateSessionFactory.session()) {
             session.beginTransaction();
-            session.merge(event);
+            session.merge(user);
             session.getTransaction().commit();
-            return event;
+            return user;
         }
     }
 
@@ -46,8 +46,7 @@ public class HibernateEventRepositoryImpl implements EventRepository {
     public void delete(Long id) {
         try (Session session = HibernateSessionFactory.session()) {
             session.beginTransaction();
-            Event event = findById(id);
-            session.remove(event);
+            session.remove(findById(id));
             session.getTransaction().commit();
         }
     }

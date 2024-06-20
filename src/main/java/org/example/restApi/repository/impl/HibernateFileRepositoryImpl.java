@@ -1,44 +1,51 @@
-package org.example.restApi.repository.hibernate;
+package org.example.restApi.repository.impl;
 
 import org.example.restApi.config.HibernateSessionFactory;
-import org.example.restApi.model.User;
+import org.example.restApi.model.File;
+import org.example.restApi.repository.EventRepository;
+import org.example.restApi.repository.FileRepository;
 import org.example.restApi.repository.UserRepository;
 import org.hibernate.Session;
 
+import javax.servlet.annotation.MultipartConfig;
 import java.util.List;
 
-public class HibernateUserRepositoryImpl implements UserRepository {
+@MultipartConfig
+public class HibernateFileRepositoryImpl implements FileRepository {
+    private UserRepository userRepository;
+    private EventRepository eventRepository;
+
     @Override
-    public List<User> findAll() {
+    public List<File> findAll() {
         try (Session session = HibernateSessionFactory.session()) {
-            return session.createQuery("FROM User").list();
+            return session.createQuery("FROM File").list();
         }
     }
 
     @Override
-    public User findById(Long id) {
+    public File findById(Long id) {
         try (Session session = HibernateSessionFactory.session()) {
-            return session.get(User.class, id);
+            return session.get(File.class, id);
         }
     }
 
     @Override
-    public User save(User user) {
+    public File save(File file) {
         try (Session session = HibernateSessionFactory.session()) {
             session.beginTransaction();
-            session.save(user);
+            session.save(file);
             session.getTransaction().commit();
-            return user;
+            return file;
         }
     }
 
     @Override
-    public User update(Long id, User user) {
+    public File update(Long id, File file) {
         try (Session session = HibernateSessionFactory.session()) {
             session.beginTransaction();
-            session.merge(user);
+            session.merge(file);
             session.getTransaction().commit();
-            return user;
+            return file;
         }
     }
 
