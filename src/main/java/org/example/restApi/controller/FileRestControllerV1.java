@@ -1,39 +1,33 @@
 package org.example.restApi.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.FileUploadException;
-import org.apache.commons.fileupload.disk.DiskFileItemFactory;
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.example.restApi.model.Event;
 import org.example.restApi.model.File;
 import org.example.restApi.model.User;
-import org.example.restApi.repository.FileRepository;
-import org.example.restApi.repository.impl.HibernateFileRepositoryImpl;
 import org.example.restApi.service.EventService;
 import org.example.restApi.service.FileService;
 import org.example.restApi.service.UserService;
 import org.example.restApi.util.ObjMapper;
 
+import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Part;
 import java.io.IOException;
 import java.util.List;
 
 @MultipartConfig()
 @WebServlet("/files")
 public class FileRestControllerV1 extends HttpServlet {
-    private final FileRepository fileRepository = new HibernateFileRepositoryImpl();
-    private FileService fileService;
-    private UserService userService;
-    private EventService eventService;
+    private final FileService fileService = new FileService();
+    private final UserService userService = new UserService();
+    private final EventService eventService = new EventService();
 
     @Override
     public void init() {
-        fileService = new FileService();
     }
 
     @Override
@@ -50,33 +44,21 @@ public class FileRestControllerV1 extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) {
-        ServletFileUpload fileUpload = new ServletFileUpload(new DiskFileItemFactory());
-        String userIdHeader = req.getHeader("id");
-        Long userId = Long.parseLong(userIdHeader);
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String userId = req.getParameter("id");
+        User user = userService.findUserById(Long.valueOf(userId));
+        Part filePart = req.getPart("file");
+        filePart.write(new java.io.File("/Users/Vadik/Desktop/upload/" + filePart.getSubmittedFileName()).toString());
+
         File file = new File();
-        User user = userService.findUserById(userId);
+        file.setName(filePart.getSubmittedFileName());
+        file.setFilePath("/Users/Vadik/Desktop/upload/" + filePart.getSubmittedFileName());
+        fileService.saveFile(file);
+
         Event event = new Event();
-        try {
-            List<FileItem> multiFiles = fileUpload.parseRequest(req);
-            for (FileItem fileItem : multiFiles) {
-                fileItem.write(new java.io.File("/Users/Vadik/Desktop/upload/" + fileItem.getName()));
-
-                file.setName(fileItem.getName());
-                file.setFilePath("/Users/Vadik/Desktop/upload/" + fileItem.getName());
-
-
-                event.setUser(user);
-                event.setFile(file);
-                eventService.saveEvent(event);
-
-                fileService.saveFile(file);
-            }
-        } catch (FileUploadException e) {
-            throw new RuntimeException(e);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        event.setUser(user);
+        event.setFile(file);
+        eventService.saveEvent(event);
     }
 
     @Override
@@ -87,7 +69,7 @@ public class FileRestControllerV1 extends HttpServlet {
     }
 
     @Override
-    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) {
         Long id = Long.parseLong(req.getParameter("id"));
         File file = fileService.getFileById(id);
         fileService.deleteFile(file.getId());

@@ -2,9 +2,7 @@ package org.example.restApi.repository.impl;
 
 import org.example.restApi.config.HibernateSessionFactory;
 import org.example.restApi.model.File;
-import org.example.restApi.repository.EventRepository;
 import org.example.restApi.repository.FileRepository;
-import org.example.restApi.repository.UserRepository;
 import org.hibernate.Session;
 
 import javax.servlet.annotation.MultipartConfig;
@@ -12,9 +10,6 @@ import java.util.List;
 
 @MultipartConfig
 public class HibernateFileRepositoryImpl implements FileRepository {
-    private UserRepository userRepository;
-    private EventRepository eventRepository;
-
     @Override
     public List<File> findAll() {
         try (Session session = HibernateSessionFactory.session()) {
