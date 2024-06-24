@@ -1,13 +1,13 @@
 package org.example.restApi.service;
 
+import lombok.RequiredArgsConstructor;
 import org.example.restApi.model.File;
 import org.example.restApi.repository.FileRepository;
 import org.example.restApi.repository.impl.HibernateFileRepositoryImpl;
 
-import javax.servlet.annotation.MultipartConfig;
 import java.util.List;
 
-@MultipartConfig
+@RequiredArgsConstructor
 public class FileService {
     private final FileRepository fileRepository;
 

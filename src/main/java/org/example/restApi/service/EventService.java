@@ -1,11 +1,13 @@
 package org.example.restApi.service;
 
+import lombok.RequiredArgsConstructor;
 import org.example.restApi.model.Event;
 import org.example.restApi.repository.EventRepository;
 import org.example.restApi.repository.impl.HibernateEventRepositoryImpl;
 
 import java.util.List;
 
+@RequiredArgsConstructor
 public class EventService {
     private final EventRepository eventRepository;
 

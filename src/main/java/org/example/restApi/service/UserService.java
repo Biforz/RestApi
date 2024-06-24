@@ -1,11 +1,13 @@
 package org.example.restApi.service;
 
+import lombok.RequiredArgsConstructor;
 import org.example.restApi.model.User;
 import org.example.restApi.repository.UserRepository;
 import org.example.restApi.repository.impl.HibernateUserRepositoryImpl;
 
 import java.util.List;
 
+@RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
 
